@@ -1,15 +1,26 @@
-from selectorlib import Extractor
 import requests
 import json
+import re
 
-# from time import sleep
 from bs4 import BeautifulSoup
-from lxml import etree
 
 find_tags_dict = {
-    '{"key":"vas-common-vm"}': 'buyboxPrice',
-    '{"key":"buyBackPageState"}': 'productPrice'
+    '{"key":"vas-common-vm"}': "buyboxPrice",
+    '{"key":"buyBackPageState"}': "productPrice",
 }
+
+
+def get_product_name(url: str):
+    """
+    Get Product Name from url given `urls.txt` file
+    This re, replace solution is not optimal, works for now
+    need to refactor later
+    """
+    product_name = re.match(r"https\:\/\/www\.amazon\.in\/[A-Za-z0-9-]*\/", url)
+    product_name = product_name.group(0)
+    product_name = product_name.replace("https://www.amazon.in/", "")
+    product_name = product_name.replace("/", "")
+    return product_name
 
 
 def find_script_tags(key: str, broth):
@@ -29,7 +40,7 @@ def get_price_from_tags(soup):
             output = json.loads(script_tags)
             if price_tag_value in output:
                 return output[price_tag_value]
-    
+
 
 def get_url_price(url):
     headers = {
@@ -46,7 +57,7 @@ def get_url_price(url):
         "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
     }
     # Download the page using requests
-    print("Downloading {}".format(url))
+    # print("Downloading {}".format(url))
     r = requests.get(url, headers=headers)
     # Simple check to check if page was blocked (Usually 503)
     if r.status_code > 500:
@@ -66,4 +77,4 @@ def get_url_price(url):
 if __name__ == "__main__":
     with open("urls.txt") as u:
         for url in u:
-            print("Price: {}".format(get_url_price(url)))
+            print("Product: {}, Price: {}".format(get_product_name(url), get_url_price(url)))
