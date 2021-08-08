@@ -1,4 +1,4 @@
-module github.com/vinaybommana/amazonpricetracker
+module amazonpricetracker
 
 go 1.16
 

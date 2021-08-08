@@ -1,4 +1,4 @@
-package main
+package trackprice
 
 import (
 	"bufio"
@@ -13,15 +13,17 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func getProductPrice(ProductUrl string) float64 {
+func GetProductPrice(ProductUrl string) float64 {
 	res, err := http.Get(ProductUrl)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer res.Body.Close()
-
 	if s, err := strconv.ParseFloat(parseHTML(res.Body), 64); err == nil {
 		return s
+	}
+	if err != nil {
+		fmt.Println(err)
 	}
 	return 0.0
 }
@@ -64,7 +66,7 @@ func readURLSFromFile(filename string) []string {
 	return urls
 }
 
-func getProductName(inputUrl string) string {
+func GetProductName(inputUrl string) string {
 	ProductSlice := strings.Split(inputUrl, "/")
 	Name := ProductSlice[len(ProductSlice)-1]
 	ProductName := strings.Split(Name, "?")[0]
@@ -97,10 +99,10 @@ func getProductName(inputUrl string) string {
 // 	}
 // }
 
-func main() {
-	for _, url := range readURLSFromFile("gamenationsurls.txt") {
-		productName := getProductName(url)
-		productPrice := getProductPrice(url)
-		fmt.Printf("%s: %f\n", productName, productPrice)
-	}
-}
+// func main() {
+// 	for _, url := range readURLSFromFile("gamenationsurls.txt") {
+// 		productName := getProductName(url)
+// 		productPrice := getProductPrice(url)
+// 		fmt.Printf("%s: %f\n", productName, productPrice)
+// 	}
+// }
