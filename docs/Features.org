@@ -1,0 +1,4 @@
+* TODO add a product to track
+** TODO run job every day to track given product at a particular time
+** TODO store given product in the database
+** TODO graphs
