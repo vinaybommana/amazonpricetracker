@@ -8,8 +8,8 @@ import (
 
 	"github.com/gorilla/mux"
 
-	productdetails "amazonpricetracker/src/ProductDetails"
-	t "amazonpricetracker/src/trackprice"
+	productdetails "pricetracker/src/ProductDetails"
+	t "pricetracker/src/trackprice"
 )
 
 type Product struct {
